@@ -1,4 +1,14 @@
-# 🌟 AI Builds My Website
+# 🤖 AI Builds My Website
+
+An AI-powered website builder that helps users create and manage business websites using Laravel, PHP, and MySQL.
+
+🌐 **Live Demo:** [https://ai-builds-my-website.ethiodeploy.app/](https://ai-builds-my-website.ethiodeploy.app/)
+
+💻 **GitHub Repository:** [https://github.com/rojanagunoori/ai-builds-my-website](https://github.com/rojanagunoori/ai-builds-my-website)
+
+🚀 **Hosted on:** [EthioDeploy](https://ethiodeploy.com/)
+
+---
 
 **An AI-powered website builder that helps business owners create professional websites using their business information, social media links, documents, and images.**
 
@@ -917,312 +927,172 @@ After deployment:
 
 ---
 
-### 🚀 Deploy to Railway (Laravel + MySQL)
+### 🚀 Free Deployment (Laravel + MySQL)
 
-This project can be deployed using [Railway](https://railway.com/), a cloud hosting platform that supports Laravel applications and MySQL databases.
+This application can be deployed using **EthioDeploy's Free Plan**, which supports Laravel applications, MySQL databases, GitHub-based deployments, and HTTPS.
 
-The deployment process uses:
+#### Free plan resources
 
--   **GitHub:** Stores the project source code.
--   **Railway:** Hosts the Laravel application.
--   **Railway MySQL:** Stores user accounts and business profiles.
--   **HTTPS domain:** Makes the application accessible through a public URL.
+-   One application project
+-   256 MB RAM
+-   0.5 CPU core
+-   MySQL database with 512 MB storage
+-   HTTPS public URL
+-   Automatic deployment from GitHub
+-   No credit card required
+-   Application sleeps after 30 minutes of inactivity
 
-> **Current implementation:** The registration, login, dashboard, business profile creation, and account deletion features can be deployed. AI website generation, document uploads, website editing, and public website publishing are not implemented yet.
+#### 1. Prepare the GitHub repository
 
-#### 1. Prepare the Laravel project
-
-Before deployment, open your terminal and navigate to the project directory:
-
-```bash
-cd ~/my_projects/ai-builds-my-website
-```
-
-Clear Laravel's cached configuration:
-
-```bash
-php artisan optimize:clear
-```
-
-Check the database migration status:
-
-```bash
-php artisan migrate:status
-```
-
-Build the frontend assets:
-
-```bash
-npm install
-npm run build
-```
-
-Test the application locally:
-
-```bash
-php artisan serve
-```
-
-Open the following address in your browser:
-
-```text
-http://127.0.0.1:8000
-```
-
-Check that registration, login, dashboard, business creation, and account deletion work correctly.
-
-#### 2. Push the project to GitHub
-
-Create a new repository on [GitHub](https://github.com/).
-
-Suggested repository name:
-
-```text
-ai-builds-my-website
-```
-
-Before uploading, verify that your `.gitignore` file excludes:
-
-```gitignore
-.env
-/vendor
-/node_modules
-```
-
-**Important:** Never upload your actual `.env` file, database password, or application key to GitHub.
-
-Run these commands:
+Push your Laravel project to GitHub.
 
 ```bash
 cd ~/my_projects/ai-builds-my-website
 
-git init
 git add .
-git status
+git commit -m "Prepare project for deployment"
+git push origin main
 ```
 
-Review the files listed by `git status`. Confirm that `.env` is not included.
+Ensure `.env` is excluded from GitHub.
 
-Commit and push the project:
+#### 2. Create an EthioDeploy account
 
-```bash
-git commit -m "Initial Laravel website builder project"
-git branch -M main
-git remote add origin YOUR_GITHUB_REPOSITORY_URL
-git push -u origin main
+Visit [EthioDeploy](https://ethiodeploy.com/).
+
+1. Sign in using GitHub.
+2. Authorize access to your repository.
+3. Click **New Project**.
+4. Select your Laravel GitHub repository.
+5. Start the deployment.
+
+EthioDeploy detects Laravel projects and automatically installs Composer dependencies, builds Vite assets, and starts the application using Nginx and PHP-FPM.
+
+#### 3. Add a MySQL database
+
+From your EthioDeploy project dashboard:
+
+1. Open your project.
+2. Add the MySQL database addon.
+3. Wait for the database to be provisioned.
+4. Configure the database connection for Laravel.
+
+The platform provides a database connection URL through the `DATABASE_URL` environment variable.
+
+#### 4. Configure Laravel database settings
+
+Laravel 11 and later support database connection URLs using `DB_URL`. Update `config/database.php` inside the MySQL connection configuration to include:
+
+```php
+'url' => env('DB_URL', env('DATABASE_URL')),
 ```
 
-Replace `YOUR_GITHUB_REPOSITORY_URL` with your actual GitHub repository URL.
+Ensure the MySQL configuration also contains the normal Laravel connection parameters.
 
-#### 3. Create a Railway account and deploy the application
+Set the environment variables in the EthioDeploy project settings:
 
-1. Visit [Railway](https://railway.com/).
-2. Sign up or log in.
-3. Connect your GitHub account.
-4. Click **New Project**.
-5. Select **Deploy from GitHub Repo**.
-6. Choose your `ai-builds-my-website` repository.
-7. Authorize Railway to access the repository if requested.
-8. Start the deployment.
+```env
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://your-project.ethiodeploy.app
 
-Railway can detect a Laravel project and configure its PHP application server. The first deployment may need environment variables before it can run successfully.
+DB_CONNECTION=mysql
+DB_URL=${DATABASE_URL}
+```
 
-Official guide: [Deploy a Laravel App on Railway](https://railway.com/guides/laravel).
+Configure your actual database connection using the database addon provided by the platform.
 
-#### 4. Create a MySQL database on Railway
+#### 5. Configure application environment
 
-The application requires MySQL to store its user accounts and business profiles.
+Set the following environment variables in your deployment settings:
 
-1. Open your Railway project.
-2. Click **New** or the add-service option.
-3. Select **Database**.
-4. Choose **MySQL**.
-5. Wait for the MySQL service to finish deploying.
-6. Open the MySQL service and select **Variables**.
+| Variable           | Value                      |
+| ------------------ | -------------------------- |
+| `APP_ENV`          | `production`               |
+| `APP_DEBUG`        | `false`                    |
+| `APP_URL`          | Your public deployment URL |
+| `DB_CONNECTION`    | `mysql`                    |
+| `DB_URL`           | Your MySQL connection URL  |
+| `QUEUE_CONNECTION` | `sync`                     |
 
-Railway provides these database variables:
-
-| Railway variable | Purpose                 |
-| ---------------- | ----------------------- |
-| `MYSQLHOST`      | MySQL server hostname   |
-| `MYSQLPORT`      | MySQL server port       |
-| `MYSQLUSER`      | Database username       |
-| `MYSQLPASSWORD`  | Database password       |
-| `MYSQLDATABASE`  | Database name           |
-| `MYSQL_URL`      | Database connection URL |
-
-Use the private Railway service variables when connecting the Laravel application to the MySQL service.
-
-Official guide: [Railway MySQL Documentation](https://docs.railway.com/databases/mysql).
-
-#### 5. Configure Laravel environment variables
-
-Open the Laravel application service in Railway.
-
-1. Select **Variables**.
-2. Add the following application variables.
-3. Replace the database service name `MySQL` in the references if your Railway database service has a different name.
-
-| Variable           | Value                                  |
-| ------------------ | -------------------------------------- |
-| `APP_NAME`         | `AI Builds My Website`                 |
-| `APP_ENV`          | `production`                           |
-| `APP_KEY`          | Your generated Laravel application key |
-| `APP_DEBUG`        | `false`                                |
-| `APP_URL`          | Your Railway public URL                |
-| `DB_CONNECTION`    | `mysql`                                |
-| `DB_HOST`          | `${{MySQL.MYSQLHOST}}`                 |
-| `DB_PORT`          | `${{MySQL.MYSQLPORT}}`                 |
-| `DB_DATABASE`      | `${{MySQL.MYSQLDATABASE}}`             |
-| `DB_USERNAME`      | `${{MySQL.MYSQLUSER}}`                 |
-| `DB_PASSWORD`      | `${{MySQL.MYSQLPASSWORD}}`             |
-| `SESSION_DRIVER`   | `file`                                 |
-| `CACHE_STORE`      | `file`                                 |
-| `QUEUE_CONNECTION` | `sync`                                 |
-| `LOG_CHANNEL`      | `stderr`                               |
-
-The `${{MySQL.MYSQLHOST}}` format is a Railway service-variable reference. Railway resolves it using the corresponding variable from the MySQL service.
-
-**Generate the Laravel application key**
-
-Run this command locally:
+The application key can be generated automatically by the platform or manually using:
 
 ```bash
 php artisan key:generate --show
 ```
 
-Copy the generated key and paste it into Railway's `APP_KEY` variable.
+Never publish your application key or database credentials.
 
-Do not publish or share this key.
+#### 6. Run database migrations
 
-**Important production notes:**
-
--   Keep `APP_DEBUG=false` so visitors cannot see detailed application errors.
--   `SESSION_DRIVER=file` and `CACHE_STORE=file` are suitable only for a simple demonstration. File-based data may not survive container replacement or redeployment. Use a properly configured persistent session and cache store for a production deployment.
--   Do not use your local database credentials in Railway. Use the Railway MySQL service credentials.
-
-#### 6. Configure the application build
-
-Open your Laravel application service in Railway.
-
-Go to **Settings → Build** and configure the custom build command, if needed:
+Configure the Laravel start command to run migrations before starting the application:
 
 ```bash
-npm run build
+php artisan migrate --force && ethiodeploy-start
 ```
 
-Railway's Laravel build environment handles the PHP application dependencies. Make sure the Composer dependencies are installed as part of the build.
+This creates the required database tables in the connected MySQL database.
 
-Next, configure the migration command under **Settings → Deploy → Pre-Deploy Command**:
+Do not use `php artisan migrate:fresh` on the deployed database because it deletes existing tables and data.
 
-```bash
-php artisan migrate --force
-```
+#### 7. Deploy and access the application
 
-This command runs Laravel database migrations against the configured Railway MySQL database before the new deployment is released.
-
-Do not run `php artisan migrate:fresh` on a production database because it drops existing tables and data.
-
-If Railway's automatic Laravel detection is working, keep its default application start configuration rather than replacing it unnecessarily.
-
-#### 7. Generate the public website URL
-
-After the application deploys successfully:
-
-1. Open the Laravel application service.
-2. Go to **Settings**.
-3. Find **Networking**.
-4. Select **Generate Domain**.
-5. Railway will generate a public HTTPS URL for your application.
-
-Example:
+Once deployment finishes successfully, EthioDeploy provides a public HTTPS URL similar to:
 
 ```text
-https://your-project.up.railway.app
+https://your-project.ethiodeploy.app
 ```
 
-This is an example only. Use the actual domain generated by Railway.
+Open the generated URL in your browser and test the application.
 
-Copy the generated URL and update your Railway application variable:
+#### 8. Test the live application
 
-```text
-APP_URL=https://your-project.up.railway.app
-```
+-   Register a new account.
+-   Log in using your credentials.
+-   Access the dashboard.
+-   Add a business profile.
+-   Verify that business details are saved.
+-   Log out.
+-   Log in again.
+-   Test account deletion.
 
-Redeploy if necessary after changing the variable.
+#### 9. Update deployment links
 
-#### 8. Test the deployed application
-
-Open the generated Railway URL in your browser.
-
-Perform the following tests:
-
-| Test                   | Expected result                                     |
-| ---------------------- | --------------------------------------------------- |
-| Open the application   | Application loads successfully                      |
-| Register a new account | User account is created                             |
-| Log in                 | User reaches the dashboard                          |
-| Add a business         | Business profile is saved                           |
-| Refresh the dashboard  | Saved business remains visible                      |
-| Log out                | User session ends                                   |
-| Log in again           | User can access their account                       |
-| Delete account         | Account and associated business records are deleted |
-
-Also check Railway's deployment logs if the application displays an error.
-
-#### 9. Update the README with deployment links
-
-After successful deployment, replace the placeholders below with your actual links:
-
-```markdown
 ## 🌐 Live Demo
 
-Live Website: https://YOUR_RAILWAY_PUBLIC_URL
+**Live Website:** [https://ai-builds-my-website.ethiodeploy.app/](https://ai-builds-my-website.ethiodeploy.app/)
 
 ## 💻 GitHub Repository
 
-Source Code: YOUR_GITHUB_REPOSITORY_URL
-```
+**Source Code:** [https://github.com/rojanagunoori/ai-builds-my-website](https://github.com/rojanagunoori/ai-builds-my-website)
 
-Do not add a fake live URL. Add it only after confirming that the deployed website works.
+## 🚀 Deployment Platform
 
-#### 10. Redeploy after making code changes
+**Hosted on:** [EthioDeploy](https://ethiodeploy.com/)
 
-Whenever you update the application locally, run:
+**Hosting:** Free Plan (Laravel + MySQL)
+
+#### 10. Redeploy after changes
+
+After making changes locally:
 
 ```bash
-cd ~/my_projects/ai-builds-my-website
-
 git add .
 git commit -m "Update application"
 git push origin main
 ```
 
-If Railway is connected to your GitHub repository with automatic deployments enabled, it will detect the new commit and start another deployment.
+EthioDeploy automatically redeploys the application after new commits are pushed to the connected repository.
 
-#### Deployment checklist
+#### Deployment limitations
 
--   [ ] Project uploaded to GitHub.
--   [ ] `.env` excluded from GitHub.
--   [ ] Railway application service created.
--   [ ] Railway MySQL database created.
--   [ ] Application environment variables configured.
--   [ ] Laravel application key generated and configured.
--   [ ] Frontend assets built.
--   [ ] Database migrations executed successfully.
--   [ ] Public Railway domain generated.
--   [ ] Registration and login tested.
--   [ ] Business creation and database storage tested.
--   [ ] Logout and account deletion tested.
--   [ ] Live URL added to README.
+The free service sleeps after 30 minutes without traffic, so the first visitor after inactivity may experience a delay.
 
-#### Deployment references
+The free container has limited memory and CPU resources. Files saved directly to the application filesystem may be lost after redeployment. Use external persistent storage for future uploaded documents and images.
 
--   [Railway Laravel Deployment Guide](https://railway.com/guides/laravel)
--   [Railway MySQL Documentation](https://docs.railway.com/databases/mysql)
--   [Laravel Deployment Documentation](https://laravel.com/docs/deployment)
+For more details, visit the [EthioDeploy Laravel Deployment Guide](https://ethiodeploy.com/deploy/laravel).
 
-**Note:** Railway hosting and database usage may incur charges depending on your plan and resource consumption. Review [Railway Pricing](https://railway.com/pricing) before deploying.
+**Free hosting is intended for learning, testing, and demonstration purposes.** Check the provider's current terms and resource limits before deploying.
 
 ---
 
